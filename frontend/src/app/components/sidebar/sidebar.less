@@ -1,0 +1,30 @@
+@sidebar-contracted-width: 90px;
+
+body{
+
+  // When the main container is composed from rows, the content shifts
+  // left 10px, then we added this style to nullify that effect
+  // &.with-sidebar{
+  //   padding-left: @sidebar-contracted-width + 10px;
+  // }
+
+  .sidebar{
+    border-right: none;
+
+    .header{
+      border-bottom: 1px solid #eee;
+      margin-bottom: 0;
+
+      .sidebar-isotype{
+        background-color: #f9f9f9;
+        left: 0;
+        width: 100%;
+      }
+    }
+
+    .option-sidebar-selected span.icon-container i.fa{
+      color: #1eacd0;
+      transition: none;
+    }
+  }
+}

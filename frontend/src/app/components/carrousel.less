@@ -1,0 +1,272 @@
+//Carrousel styles for min-width: 650 px (one card visible)
+.scroll-buttons{
+  height: 28px;
+  margin-bottom: 20px;
+  position: relative;
+
+  a{
+    display: inline-block;
+    height: 28px;
+
+    .go-back-text{
+      color: #cfcfcf;
+      cursor: pointer;
+      display: inline;
+      font-family: Montserrat;
+      font-size: 17px;
+      font-weight: 700;
+      margin: 0 8px;
+      text-transform: uppercase;
+      vertical-align: middle;;
+    }
+
+    .icon-carrousel-next,.icon-carrousel-back{
+      color: #cfcfcf;
+      cursor:pointer;
+      font-size: 42px;
+      font-weight: 400;
+      line-height: 28px;
+      text-transform: uppercase;
+    }
+  }
+
+  .button-prev{
+    float: left;
+  }
+
+
+  .button-next{
+    float: right;
+  }
+}
+
+.no-meeting-placeholder{
+  background-color: white;
+  background-image: linear-gradient(to top, rgba(194, 194, 194, 0.1) 0%, rgba(255, 255, 255, 0.1) 100%);
+  border-radius: 15px;
+  border: 1px solid #c8cccc;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.22), 0 2px 2px rgba(93, 93, 93, 0.18);
+  min-height:500px;
+  opacity: 0.44;
+  width:450px;
+
+  p{
+    color: #ccc;
+    font-family: @system-title-font-family;
+    font-size: 1rem;
+    line-height: 452px;
+    text-align: center;
+    text-shadow: 0 1px 0 white;
+    text-transform: uppercase;
+  }
+}
+
+.carrousel-container{
+  height: 560px;
+  position:relative;
+
+  .carrousel-element{
+    position: absolute;
+    transition: @smooth;
+
+    .meeting{
+      width: 100%;
+    }
+
+    .card-meeting{
+      margin: 0 !important;
+    }
+  }
+
+  /*Breakpoint for phone device*/
+  @media (min-width: 320px) and (max-width: 768px){
+      .carrousel-element{
+        width: 100%;
+      }
+
+      .no-meeting-placeholder{
+        max-width: 100%;
+        width: 100%;
+      }
+    }
+
+  .carrousel-element-0{
+    left: -47px;
+    opacity:0;
+    transform: scale(0.70);
+    z-index: 1;
+  }
+
+  .carrousel-element-1{
+    left: -24px;
+    opacity: 0;
+    transform: scale(0.85);
+    z-index: 2;
+  }
+
+  .carrousel-element-2{
+    left: 0;
+    z-index: 10;
+  }
+
+  .carrousel-element-3{
+    left: 0;
+    opacity: 0;
+    transform: scale(0.85);
+    z-index: 2;
+  }
+
+  .carrousel-element-4{
+    left:  0;
+    opacity: 0;
+    transform: scale(0.70);
+    z-index: 1;
+  }
+}
+
+//Carrousel styles for min-width: 768px (three card visible)
+@media  (min-width: 768px){
+  .scroll-buttons{
+    margin-bottom: 0;
+    margin: auto;
+    width: 500px;
+  }
+
+  .carrousel-container{
+    margin-top: 40px;
+    margin: auto;
+    width: 500px;
+
+    .carrousel-element{
+      width: 350px;
+
+      .meeting{
+        width: 100%;
+      }
+    }
+
+    .carrousel-element-0{
+      left: -26px;
+    }
+
+    .carrousel-element-1{
+      left: -27px;
+      opacity: 0.65;
+    }
+
+    .carrousel-element-2{
+      left: 75px;
+    }
+
+    .carrousel-element-3{
+      left: 177px;
+      opacity: 0.65;
+    }
+
+    .carrousel-element-4{
+      left: 177px;
+    }
+  }
+}
+
+
+//Carrousel styles for min-width: 985px (three cards visible)
+@media  (min-width: 985px){
+  .scroll-buttons{
+    width: 850px;
+  }
+
+  .carrousel-container{
+    margin-top: 0;
+    width: 850px;
+
+    .carrousel-element{
+      width: 450px;
+    }
+
+    .carrousel-element-0{
+      left: -34px;
+    }
+
+    .carrousel-element-1{
+      left: -34px;
+    }
+
+    .carrousel-element-2{
+      left: 200px;
+    }
+
+    .carrousel-element-3{
+      left: 434px;
+    }
+
+    .carrousel-element-4{
+      left: 434px;
+    }
+  }
+}
+
+//Carrousel styles for min-width: 1300px (three cards visible)
+@media  (min-width: 1300px){
+  .scroll-buttons{
+    width: 950px;
+  }
+
+  .carrousel-container{
+    width: 950px;
+
+    .carrousel-element-0{
+      left: 0;
+    }
+
+    .carrousel-element-1{
+      left: 0;
+    }
+
+    .carrousel-element-2{
+      left: 250px;
+    }
+
+    .carrousel-element-3{
+      left: 500px;
+    }
+
+    .carrousel-element-4{
+      left: 500px;
+    }
+  }
+}
+
+//Carrousel styles for min-width: 1675px (three cards visible)
+@media  (min-width: 1675px){
+  .scroll-buttons{
+    width: 882px;
+  }
+
+  .carrousel-container{
+    width: 1200px;
+
+    .carrousel-element-0{
+      left: 125px;
+    }
+
+    .carrousel-element-1{
+      left: 125px;
+    }
+
+    .carrousel-element-2{
+      left: 375px;
+    }
+
+    .carrousel-element-3{
+      left: 625px;
+    }
+
+    .carrousel-element-4{
+      left: 625px;
+    }
+  }
+
+}
+
+//Carrousel styles for min-width: 1920px (three cards visible)

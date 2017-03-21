@@ -1,0 +1,82 @@
+<div navbar search-bar></div>
+<div sidebar></div>
+
+<div class="grid main-container">
+    <div class="row">
+        <div class="col content">
+            <div class="grid">
+                <div class="row">
+                    <div class="col">
+                        <h1>Metodo 1: </h1>
+                        <h3>Datos Históricos</h3>
+                        <form ng-submit="ctrl.uploadDataset()" action="">
+                            Cargar Datos: <input files-model="ctrl.newDataset.file" type="file">
+                            <button class="button button-small">Cargar</button>
+                        </form>
+
+                    </div>
+                </div>
+            </div>
+            <div class="grid input-grid">
+                <div class="row">
+                    <div class="col-xs-2 content filters">
+                        <label class="time-label" for="time-begin">Initial: </label>
+
+                        <input type="date"
+                               ng-model="ctrl.initialTime"
+                               class="date-input input-small" required>
+                        <label class="time-label" for="time-end">End: </label>
+                        <input type="date"
+                               ng-model="ctrl.endTime"
+                               class="date-input input-small" required>
+
+
+                        <div class="content actions">
+                            <button class="button button-small refresh-axis-button" ng-click="ctrl.refreshGrid()">Refresh</button>
+                        </div>
+                    </div>
+                    <div class="col-xs-8">
+                        <canvas id="line" class="chart chart-line" chart-data="ctrl.data"
+                                chart-labels="ctrl.labels" chart-series="ctrl.series" chart-options="ctrl.options"
+                                chart-dataset-override="ctrl.datasetOverride" chart-click="onClick">
+                        </canvas>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col content">
+            <h1>Predicciones </h1>
+            <div class="grid input-grid">
+                <div class="row">
+                    <div class="col-xs-2 content filters">
+                        <label class="time-label" for="time-begin">Initial: </label>
+
+                        <input type="date"
+                               ng-model="ctrl.initialTime"
+                               class="date-input input-small" required>
+                        <label class="time-label" for="time-end">End: </label>
+                        <input type="date"
+                               ng-model="ctrl.endTime"
+                               class="date-input input-small" required>
+
+
+                        <div class="content actions">
+                            <button class="button button-small refresh-axis-button" ng-click="ctrl.refreshGrid()">Refresh</button>
+                        </div>
+                    </div>
+                    <div class="col-xs-6">
+                        <canvas id="line" class="chart chart-line" chart-data="ctrl.data"
+                                chart-labels="ctrl.labels" chart-series="ctrl.series" chart-options="ctrl.options"
+                                chart-dataset-override="ctrl.datasetOverride" chart-click="onClick">
+                        </canvas>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>

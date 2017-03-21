@@ -1,0 +1,80 @@
+.ta-root{
+  width: 100%;
+
+  .ta-toolbar{
+    .btn-group{
+      .btn-default{
+        background-color: white;
+        border-color: #ccc;
+        border-width: 1px;
+        border-left-width: 0;
+        border-style: solid;
+        color: #666;
+        width: 30px;
+        height: 30px;
+
+        &:first-child{
+          border-bottom-left-radius: 3px;
+          border-left-width: 1px;
+          border-top-left-radius: 3px;
+        }
+
+        &:last-child{
+          border-left: #ccc solid 1px !important;
+          border-radius: 3px;
+          margin-left: 0.5rem;
+        }
+
+        &.active{
+          background: whitesmoke;
+          box-shadow: inset 0 1px 5px rgba(0,0,0,0.2);
+        }
+
+        &[disabled]{
+          opacity: 0.3;
+        }
+      }
+
+      #toolbarWC{
+        display:none !important;
+      }
+
+      #toolbarCC{
+        display:none !important;
+      }
+    }
+  }
+
+  .ta-scroll-window.form-control{
+    box-shadow: none !important;
+  }
+
+  .ta-editor {
+    border-radius: 0 0 10px 10px;
+    font-family: inherit;
+    font-size: 100%;
+    height: 212px;
+    max-height: 300px !important;
+    min-height: 200px;
+    overflow-y: auto;
+    transition: @fast;
+
+    &:hover{
+      background: #fafafa;
+    }
+
+    .ta-bind{
+      -webkit-appearance: none;
+      height: 200px;
+      max-height: 200px;
+      min-height: 200px;
+      outline: none;
+      overflow-y: auto;
+      padding-left: 30px;
+
+      p{
+        margin: 0;
+      }
+    }
+  }
+}

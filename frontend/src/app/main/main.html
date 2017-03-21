@@ -1,0 +1,14 @@
+<div class="grid">
+  <div class="row">
+    <div class="col content">
+      <h1>App states:</h1>
+      <ul>
+        <li ng-repeat="state in ctrl.states" ng-if="state.name">
+          <a ui-sref="{{ state.name }}">
+            <span>{{ state.name }}</span>
+          </a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>

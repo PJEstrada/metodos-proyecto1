@@ -1,0 +1,262 @@
+@popover-size-header:             25px;
+@card-loader-left-separation:     45%;
+@card-loader-circle-size:         15px;
+@card-loader-circle-separation:   7px;
+@card-loader-color:               #1dc077;
+
+.card {
+  cursor: pointer;
+  margin: 30px;
+
+  // For file cards, won't specify that class here because I would have to add it everywhere
+  .thumbnail {
+    background-position: top center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    border-top-left-radius: @card-border-radius;
+    border-top-right-radius: @card-border-radius;
+    height: 217px;
+  }
+
+  &.card-file {
+    margin: 0;
+    max-width: none;
+    overflow: visible;
+    position: relative;
+    width: 100%;
+
+    .file-extension-container{
+      background-image: linear-gradient(to top, rgba(194, 194, 194, 0.1) 0%, rgba(255, 255, 255, 0.1) 100%);
+      border-radius: 10px 10px 0 0;
+      border: none;
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.22);
+      height: 217px;
+      margin: 0;
+      width: 100%;
+
+      .circle-extension{
+        border-radius: 100%;
+        height: 72px;
+        width: 72px;
+
+        i{
+          color: white;
+          font-size: 36px;
+        }
+      }
+
+      &.pdf-extension{
+        background-color: #aa2b2b;
+
+        .circle-pdf{
+          background-color: #e32d2d;
+        }
+      }
+
+      &.img-extension{
+        background-color: #8739b0;
+
+        .circle-img{
+          background-color: #a951d7;
+        }
+      }
+    }
+
+    .card-tittle{
+      padding-right: 20px;
+
+      &.file-name{
+        .ellipsis();
+        color: black;
+        font-size: 16px;
+        font-weight: 700;
+        margin-bottom: 4px;
+        margin-top: 0;
+      }
+    }
+
+    .card-section{
+      padding: 27px 35px 23px 24px;
+
+      &.align-content{
+        padding-right: 35px;
+        position: relative;
+
+        .button-flow{
+          background: none;
+          border: none;
+          color: #d6e1e1;
+          font-size: 28px;
+          line-height: 60px;
+          padding: 0 10px;
+          position: absolute;
+          right: 22px;
+          top: 20px;
+          width: auto;
+        }
+      }
+    }
+
+    .card-paragraph{
+      margin-top: 0;
+    }
+
+    .hr-divider{
+      margin: 0;
+    }
+
+    .card-footer{
+      padding: 17px 0;
+
+      .text-footer{
+        &.strong{
+          font-weight: 800;
+        }
+      }
+    }
+
+    // Specific for file cards popovers
+    .popover{
+      background-image: linear-gradient(to top, rgba(194, 194, 194, 0.1) 0%, rgba(255, 255, 255, 0.1) 100%);
+      border-radius: 20px;
+      border: 1px solid #c8cccc;
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.22), 0 2px 2px rgba(93, 93, 93, 0.18);
+      top: 1px !important;
+      transition: top @fast;
+    }
+
+    &.test{
+      .popover{
+        top: -110px !important;
+      }
+
+      .popover-files-menu-main-container{
+        height: 305px;
+        width: 305px;
+      }
+    }
+
+    // .popover-files-menu-main-container{
+    //   height: 85px;
+    //   position: relative;
+    //   transition: width @fast, height @fast;
+    //   width: 150px;
+
+    //   .popover-files-menu{
+    //     opacity: 1;
+    //     position: absolute;
+    //     transition: @faster;
+    //     visibility: visible;
+
+    //     &.hide-menu {
+    //       opacity: 0;
+    //       visibility: hidden;
+    //     }
+
+    //     .popover-files-menu-list{
+    //       color: #787878;
+    //       font-weight: 700;
+    //       list-style: none;
+    //       padding: 10px 20px 1px 15px;
+
+    //       .popover-files-menu-item{
+    //         margin-bottom: 10px;
+
+    //         .popover-files-anchor-item{
+    //           display: block;
+    //         }
+
+    //         .popover-files-icon-item{
+    //           font-size: 15px;
+    //           margin-right: 8px;
+    //         }
+    //       }
+
+    //       .trash-item{
+    //         color: #cc6c6c;
+    //       }
+    //     }
+
+    //     &.configuration-panel{
+    //       padding: 20px 25px;
+
+    //       .popover-files-config-header{
+    //         color: #b8b8b8;
+    //         height: @popover-size-header;
+    //         position: relative;
+    //         text-align: center;
+
+    //         .popover-files-config-header-icon{
+    //           background: none;
+    //           border: none;
+    //           color: #b8b8b8;
+    //           font-size: 25px;
+    //           left: -7px;
+    //           position: absolute;
+    //           top: -7px;
+    //         }
+
+    //         h3{
+    //           line-height: @popover-size-header;
+    //           margin: 0;
+    //         }
+    //       }
+    //     }
+    //   }
+    // }
+
+    .loading {
+      .expand();
+      background: rgba(0, 0, 0, 0.8);
+      color: white;
+      font-weight: bold;
+      left: 0;
+      opacity: 0;
+      position: absolute;
+      text-align: center;
+      top: 0;
+      transition: @fast;
+      z-index: -1;
+
+      .row {
+        height: 100%;
+      }
+    }
+
+    &.downloading {
+      .loading {
+        opacity: 1.0;
+        z-index: 2;
+      }
+    }
+  }
+
+  &.files-card-popup {
+    position: relative;
+
+    .loading {
+      .expand();
+      background: rgba(0, 0, 0, 0.8);
+      color: white;
+      font-weight: bold;
+      left: 0;
+      opacity: 0;
+      position: absolute;
+      text-align: center;
+      top: 0;
+      transition: @fast;
+      z-index: -1;
+
+      .row {
+        height: 100%;
+      }
+    }
+
+    &.downloading {
+      .loading {
+        opacity: 1.0;
+        z-index: 2;
+      }
+    }
+  }
+}

@@ -1,0 +1,63 @@
+<!--
+main
+detailed
+meeting
+committeeinvitation
+boardinvitation
+meetingchanged
+newpublicnote
+-->
+
+<div class="popover-main-container-notification"
+      ng-class="{
+        'main': ctrl.currentViewPopoverNotification == 'main',
+        'detailed': ctrl.currentViewPopoverNotification == 'detailed',
+        'meeting': ctrl.currentViewPopoverNotification == 'meeting',
+        'committeeinvitation': ctrl.currentViewPopoverNotification == 'committeeinvitation',
+        'boardinvitation': ctrl.currentViewPopoverNotification == 'boardinvitation',
+        'meetingchanged': ctrl.currentViewPopoverNotification == 'meetingchanged',
+        'newpublicnote': ctrl.currentViewPopoverNotification == 'newpublicnote'}">
+  <!--- Main view --->
+  <div class="popover-sections popover-main popover-navbar-menu-notification">
+    <div class="popover-title">
+      ALERTAS
+
+      <button ng-if="ctrl.notificationsDisplay.length > 5" ui-sref="notifications" class="view-all button button-main button-small">View <span class="notification-number">{{ ctrl.notificationsDisplay.length }} - 5</span> More</button>
+      <button ng-if="ctrl.notificationsDisplay.length <= 5" ui-sref="notifications" class="view-all button button-main button-small">Ver Mas</button>
+    </div>
+
+    <div class="popover-inner-section">
+      <div class="row">
+        <div class="col">
+          <div
+            class="notification-item"
+            ng-repeat="notification in ctrl.notificationsDisplay | limitTo: 5"">
+            <a
+              href=""
+              type="link"
+              position="right">
+              <div class="circle-container">
+                <div class="circle">
+                  <i
+                          class="fa fa-exclamation-triangle"
+                  ></i>
+                </div>
+              </div>
+              <div class="notification-info">
+                <div class="big-up ellipsis">
+                  <span class="notif-title-blue">{{ notification.description }}</span>
+                </div>
+                <div class="small-down">
+                  {{ notification.inserted_at }} </div>
+              </div>
+            </a>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+
+</div>

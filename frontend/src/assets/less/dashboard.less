@@ -1,0 +1,65 @@
+@dashboard-filter-form-input-base-width:                                        150px;
+@dashboard-filter-form-break:                                                   (@system-small-break + 100px);
+
+.dashboard{
+  .switching-button{
+    transition: none;
+  }
+
+  .main-container{
+    padding-top: @navbar-height;
+
+    h1.main-title{
+      color: #586068;
+      margin: -10px 0 1rem 0;
+
+      i{
+        color: #333;
+        margin-right: 0.5rem;
+      }
+
+      @media(min-width: @system-small-break){
+        font-size: 1.75rem;
+      }
+
+      @media(min-width: @system-medium-break){
+        font-size: 2.5rem;
+        margin-bottom: 1.5rem;
+      }
+    }
+  }
+
+  .filter-form{
+    .clearfix();
+    margin: 0 0 2rem 0;
+
+    & > *:first-child{
+      @media(min-width: @dashboard-filter-form-break){
+        float: left;
+      }
+    }
+
+    & > *:last-child{
+      @media(min-width: @dashboard-filter-form-break){
+        float: right;
+      }
+    }
+
+    select{
+      @media(min-width: @dashboard-filter-form-break){
+        width: @dashboard-filter-form-input-base-width;
+      }
+    }
+
+    .input-wrapper{
+      .@{fa-css-prefix}{
+        color: @black-20;
+      }
+
+      @media(min-width: @dashboard-filter-form-break){
+        margin-bottom: 0;
+        width: @dashboard-filter-form-input-base-width * 2;
+      }
+    }
+  }
+}

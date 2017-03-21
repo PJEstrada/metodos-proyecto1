@@ -1,0 +1,46 @@
+<div class="popover-sections popover-navbar-menu-notification">
+  <div class="popover-title">
+    NOTIFICACIONES
+    <span class="tag-counter">Sin leer</span>
+    <div class="circle-counter-container">
+      <div class="circle-counter">
+        {{ctrl.notReadCounter.count}}
+      </div>
+    </div>
+  </div>
+  <div class="popover-inner-section">
+    <div class="row">
+      <div class="col">
+        <div
+          class="notification-item"
+          ng-repeat="notification in ctrl.notificationsDisplay | limitTo: 5">
+
+          <a
+            type="link"
+            position="right"
+            >
+            <div class="circle-container">
+              <div class="circle">
+                <i
+                  class="ic ic-calendar-o"
+                  icon="calendar-o"></i>
+              </div>
+            </div>
+            <div class="notification-info">
+              <div class="big-up ellipsis">
+                <span class="notif-title-gray">El día de hoy tienes </span>
+                <span class="notif-title-blue">{{ notification.description }}</span>
+              </div>
+              <div class="small-down">
+                {{ notification.formatDate }}
+              </div>
+            </div>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="popover-footer" >
+    <a ui-sref="notifications">VER TODOS LOS AVISOS</a>
+  </div>
+</div>
