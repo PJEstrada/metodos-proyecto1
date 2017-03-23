@@ -1,10 +1,12 @@
 from rest_framework import  viewsets
-from predictions.serializers import UploadDataSetSerializer
+from predictions.serializers import UploadDataSetSerializer, MedidaSerializer
 from predictions.models import DataSet, Medida
 from rest_framework import status
 from rest_framework.response import Response
 from openpyxl import load_workbook
 from django.db import transaction
+from rest_framework.decorators import api_view
+from rest_framework import status
 
 def sheet_to_list(sheet):
     print sheet
@@ -70,3 +72,14 @@ class UploadDataSetViewSet(viewsets.ModelViewSet):
             return Response(dataset_serializer.errors,
                             status=status.HTTP_400_BAD_REQUEST)
 
+
+@api_view(['GET'])
+def getDataSet(request):
+    """
+    Get all active students structured per level on Edoo.
+    :param request:
+    :return:
+    """
+    ser = MedidaSerializer(Medida.objects.all(), many=True)
+    response = Response({"timeseries": ser.data})
+    return response
