@@ -91,5 +91,6 @@ def getDataSet(request):
 def predictions_stlm(request):
     medidas = Medida.objects.all()
     trainPredictPlot, testPredictPlot, err_avg = deep_learn.stlm(medidas)
-    
+    for x in trainPredictPlot:
+        
 
