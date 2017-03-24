@@ -7,6 +7,19 @@ from matplotlib.pylab import rcParams
 rcParams['figure.figsize'] = 15, 6
 from statsmodels.tsa.stattools import adfuller
 from statsmodels.tsa.stattools import acf, pacf
+from statsmodels.tsa.arima_model import ARIMA
+
+
+def get_last_n_months(n):
+    """
+        Obtener los ultimos n meses del set de datos
+    :param n:
+    :return:
+    """
+    medidas = Medida.objects.all().order_by('fecha')
+    dataset = medidas[len(medidas)-(n*30):]
+    return dataset
+
 
 def medida_to_data_frame(medidas):
     fechas = []
@@ -84,7 +97,17 @@ def decompose_series(timeseries):
     plt.tight_layout()
     ts_log_decompose = residual
     ts_log_decompose.dropna(inplace=True)
+    plt.show(block=False)
     return trend, seasonal, residual
+
+
+def arima_ar_model(timeseries):
+    model = ARIMA(timeseries.unstack(), order=(1, 1, 1), dates=timeseries.index)
+    results_AR = model.fit(disp=-1)
+    plt.plot(timeseries)
+    plt.plot(results_AR, color='red')
+    plt.title('RSS: %.4f' % sum((results_AR.fittedvalues - timeseries) ** 2))
+    plt.show(block=False)
 
 
 def plot_acf_pacf(timeseries):
@@ -115,6 +138,7 @@ def plot_acf_pacf(timeseries):
     plt.axhline(y=1.96/np.sqrt(len(timeseries)),linestyle='--',color='gray')
     plt.title('Partial Autocorrelation Function')
     plt.tight_layout()
+    plt.show(block=False)
     return lag_acf, lag_pacf
 
 

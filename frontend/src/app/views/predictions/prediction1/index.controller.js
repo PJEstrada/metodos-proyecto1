@@ -15,7 +15,8 @@
     '$state',
     'WeedApi',
     'moment',
-    'ApiGetPredictions'
+    'ApiGetPredictions',
+    'ApiGetFinanceData'
   ];
   function predictionController(
     $scope,
@@ -24,17 +25,18 @@
     $state,
     WeedApi,
     moment,
-    ApiGetPredictions
+    ApiGetPredictions,
+      ApiGetFinanceData
   ) {
     var vm = this;
     vm.display_mode = "date";
     // Initial end time is current hour
-    vm.endTime = new Date();
+    vm.endTime = new Date(2015,12,31,0,0,0);
     vm.endTimeHours = new Date();
     // Set format for HTML input field
     vm.endTimeInput = moment(vm.endTime).format("HH:mm");
     // Set initial hour as curent hour minus 1 hour
-    vm.initialTime = new Date();
+    vm.initialTime = new Date(2012,1,1,0,0,0);
     vm.initialTimeHours = new Date();
     vm.initialTime.setDate(vm.initialTime.getDate() - 1);
     vm.initialTimeHours.setDate(vm.initialTimeHours.getDate() - 1);
@@ -44,118 +46,30 @@
 
     vm.uploadDataset = function(){
       $log.log(vm.newDataset);
-      ApiGetPredictions.save(vm.newDataset);
-      $log.log("upload called");
+      ApiGetPredictions.save(vm.newDataset,function(response){
+        vm.fetchMeterData();
+      });
     };
 
     // Fetch All predictions
     vm.fetchMeterData = function () {
-      vm.data = [];
-      vm.data.push({x: new Date(), y:10 });
-      vm.data.push({x: new Date(), y: 12});
-      vm.data.push({x: new Date(), y: 15});
-      /*new ApiGetMeter.get({id: $stateParams.id})
-        .$promise.then(function (response) {
-        vm.meter = response.data;
+      vm.data = [[]];
+      vm.series = [];
+      vm.timeseries = new ApiGetFinanceData();
+      vm.timeseries.$get(function(response){
+        vm.dataseries = response.timeseries;
+        for (var i=0; i< vm.dataseries.length; i++){
+          vm.data[0].push({'x': vm.dataseries[i].fecha , 'y': vm.dataseries[i].cobro })
+        }
+       vm.refreshGrid();
 
-      }, function (err) {
-
-      }).then(function () {
-        // Prepare request to get entries.
-        vm.entries = new ApiGetEntries();
-        // Add paremeters
-        vm.entries.begin_date = moment(vm.initialTime).format("YYYY-MM-DDTHH:mm:ssZ");
-        vm.entries.end_date = moment(vm.endTime).format("YYYY-MM-DDTHH:mm:ssZ");
-
-        vm.entries.$save(function (response) {
-          $log.log(response);
-          var dataPoints = response.data;
-          vm.currentEntries = [];
-          vm.logEntries = [];
-          for (var i = 0; i < dataPoints.length; i++) {
-            // Parse the received date
-            var dateReceived = dataPoints[i].inserted_at;
-            var dateObject = new Date(dateReceived);
-            // Extract the fuel level (sonar) and the date and time
-            vm.currentEntries.push(
-              {
-                'time': dateObject,
-                'level': dataPoints[i].sonnar
-              }
-            );
-
-            // Adding log entries for right side log display.
-            vm.logEntries.push(
-              {
-                'time': dateObject,
-                'level': dataPoints[i].sonnar,
-                'temperature': dataPoints[i].temperature
-              }
-            );
-          }
-          $log.log("new first: ", vm.currentEntries[0]);
-          var filteredData = getAveragesEntries(vm.currentEntries, 5);
-          //$log.log("AVERAGED: ",vm.currentEntries);
-          // Refreshing graph
-          vm.data = [];
-          // Setting time scale (x axis)
-
-          for (var i = 0; i < filteredData.length; i++) {
-            vm.data.push(
-              {
-                x: filteredData[i].time,
-                y: filteredData[i].level
-              }
-            )
-          }
-          vm.data.sort(function (a, b) {
-            // Turn your strings into dates, and then subtract them
-            // to get a value that is either negative, positive, or zero.
-            return new Date(b.x) - new Date(a.x);
-          });
-
-          $log.log("DATA", vm.data);
-          vm.updateChartOptions();
-        }, function (err) {
-          $log.log(err);
-        });
+      })
 
 
-      });*/
     };
 
     vm.refreshGrid = function(){
-      if(vm.display_mode == 'hours'){
-        var hours = vm.endTimeHours.getHours();
-        var minutes = vm.endTimeHours.getMinutes();
-        vm.endTime.setHours(hours);
-        vm.endTime.setMinutes(minutes);
-        var hoursInit = vm.initialTimeHours.getHours();
-        var minutesInit = vm.initialTimeHours.getMinutes();
-        vm.initialTime.setHours(hoursInit);
-        vm.initialTime.setMinutes(minutesInit);
         vm.updateChartOptions();
-      }
-      else{
-        vm.updateChartOptions();
-      }
-
-    }
-    function arrayMin(arr) {
-      return arr.reduce(function (p, v) {
-        return ( p < v ? p : v );
-      });
-    }
-
-    function arrayMax(arr) {
-      return arr.reduce(function (p, v) {
-        return ( p > v ? p : v );
-      });
-    }
-
-    vm.changeInputs = function(){
-
-
     };
     /*
      * This function updates the axis on the chart so it
@@ -163,46 +77,33 @@
      * */
     vm.updateChartOptions = function (){
       // Get the min and max levels of the current data
-      if(vm.display_mode == 'hours'){
-        vm.options = {
-          type:'line',
-          fill: false,
-          backgroundColor: 'transparent',
-          scales: {
-            xAxes: [{
-              type:"time",
-              time:{
-                unit:'hour',
-                min: vm.initialTime,
-                max: vm.endTime
-              },
-              position: 'bottom'
-            }]
-          }
-        };
-      }
-      else{
-        vm.options = {
-          type:'line',
-          fill: false,
-          backgroundColor: 'transparent',
-          scales: {
-            xAxes: [{
-              type:"time",
-              time:{
-                unit:'day',
-                min: vm.initialTime,
-                max: vm.endTime
-              },
-              position: 'bottom'
-            }]
-          }
-        };
-      }
 
+        vm.options = {
+          type:'line',
+          fill:'rgba(220,220,220,0)',
+          scales: {
+            xAxes: [{
+              type:"time",
+              time:{
+                min: vm.initialTime,
+                max: vm.endTime
+              },
+              position: 'bottom'
+            }]
+          }
+        };
+      $scope.colors = [{
+        backgroundColor : 'rgba(220,220,220,0)',
+        pointBackgroundColor: '#0062ff',
+        pointHoverBackgroundColor: '#0062ff',
+        borderColor: '#0062ff',
+        pointBorderColor: '#0062ff',
+        pointHoverBorderColor: '#0062ff',
+        fill: 'rgba(220,220,220,0)' /* this option hide background-color */
+      }, '#00ADF9', 'rgba(220,220,220,0)', 'rgba(220,220,220,0)'];
     };
 
-    function getAveragesEntries(data, divisor){
+    function getAveragesEntries(data, divisor ){
       var initTime = new Date(vm.initialTime.getTime());
       var dateList = [];
       var endTime = new Date(vm.endTime.getTime());

@@ -12,4 +12,9 @@ urlpatterns = [
         views.getDataSet,
         name='get_data_set'
     ),
+    url(
+        r'^predictions-stlm/$',
+        views.predictions_stlm,
+        name='predictions_stlm'
+    ),
 ]

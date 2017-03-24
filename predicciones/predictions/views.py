@@ -7,6 +7,8 @@ from openpyxl import load_workbook
 from django.db import transaction
 from rest_framework.decorators import api_view
 from rest_framework import status
+import stlm4 as deep_learn
+
 
 def sheet_to_list(sheet):
     print sheet
@@ -83,3 +85,11 @@ def getDataSet(request):
     ser = MedidaSerializer(Medida.objects.all(), many=True)
     response = Response({"timeseries": ser.data})
     return response
+
+
+@api_view(['GET'])
+def predictions_stlm(request):
+    medidas = Medida.objects.all()
+    trainPredictPlot, testPredictPlot, err_avg = deep_learn.stlm(medidas)
+    
+

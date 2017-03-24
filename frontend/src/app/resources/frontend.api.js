@@ -9,5 +9,6 @@
     .module('frontend.api', [
       'ngResource',
       'api.ApiGetPredictions',
+      'api.ApiGetFinanceData'
     ]);
 })(angular);
