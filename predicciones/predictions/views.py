@@ -7,8 +7,8 @@ from openpyxl import load_workbook
 from django.db import transaction
 from rest_framework.decorators import api_view
 from rest_framework import status
-import stlm4 as deep_learn
-
+from stlm4 import stlm
+import math
 
 def sheet_to_list(sheet):
     print sheet
@@ -89,8 +89,27 @@ def getDataSet(request):
 
 @api_view(['GET'])
 def predictions_stlm(request):
-    medidas = Medida.objects.all()
-    trainPredictPlot, testPredictPlot, err_avg = deep_learn.stlm(medidas)
-    for x in trainPredictPlot:
-        
+    medidas = Medida.objects.all().order_by('fecha')
+    res = stlm(medidas)
+    train_predict, test_predict, error, dataset, train_size, test_size = res
+    test_data = []
+    train_data = []
+    # Add train data
+    for i in range(0, train_size):
+        # train_data.append({'cobro': train_predict[i][0], 'fecha': str(medidas[i].fecha)})
+        if not math.isnan(train_predict[i][0]):
+            train_data.append(Medida(cobro=train_predict[i][0], fecha=medidas[i].fecha))
+        else:
+            train_data.append(Medida( fecha=medidas[i].fecha))
+    # Add test data
+    for i in range(0, test_size):
+        # test_data.append({'cobro': train_predict[i][0], 'fecha': str(medidas[train_size+i].fecha)})
+        # test_data.append({'cobro' : train_predict[i][0], 'fecha': str(medidas[train_size+i].fecha)})
+        if not math.isnan(test_predict[train_size+i][0]):
+            test_data.append(Medida(cobro=test_predict[train_size+i][0], fecha=medidas[train_size+i].fecha))
+        else:
+            test_data.append(Medida(fecha=medidas[train_size + i].fecha))
+    test_data_ser = MedidaSerializer(test_data, many=True)
+    train_data_ser = MedidaSerializer(train_data, many=True)
+    return Response({'test_data': test_data_ser.data, 'train_data': train_data_ser.data, 'error': error})
 

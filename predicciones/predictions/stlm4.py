@@ -24,6 +24,7 @@ def create_dataset(dataset, look_back=1):
 
 
 def stlm(medidas):
+    numpy.random.seed(7)
     dataframe = medida_to_data_frame(medidas)
     dataset = dataframe.values
     dataset = dataset.astype('float32')
@@ -95,4 +96,4 @@ def stlm(medidas):
     plt.plot(trainPredictPlot)
     plt.plot(testPredictPlot)
     plt.show(block=False)
-    return trainPredictPlot, testPredictPlot, avg_error
+    return trainPredictPlot, testPredictPlot, avg_error, dataset, train_size, test_size

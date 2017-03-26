@@ -9,6 +9,7 @@
     .module('frontend.api', [
       'ngResource',
       'api.ApiGetPredictions',
-      'api.ApiGetFinanceData'
+      'api.ApiGetFinanceData',
+      'api.ApiGetSTLM'
     ]);
 })(angular);
