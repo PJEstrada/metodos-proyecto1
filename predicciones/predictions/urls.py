@@ -15,6 +15,16 @@ urlpatterns = [
     url(
         r'^predictions-stlm/$',
         views.predictions_stlm,
-        name='predictions_stlm'
+       name='predictions_stlm'
+    ),
+    url(
+    	r'^analisis/$',
+    	views.mediasM,
+    	name='analisis'
+    ),
+    url(
+    	r'^ponderadas/$',
+    	views.mediasMovP,
+    	name='MediasMPon'
     ),
 ]

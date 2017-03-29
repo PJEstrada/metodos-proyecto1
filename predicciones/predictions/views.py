@@ -7,6 +7,8 @@ from openpyxl import load_workbook
 from django.db import transaction
 from rest_framework.decorators import api_view
 from rest_framework import status
+import stlm4 as deep_learn
+from predictions.models import Medida
 from stlm4 import stlm
 import math
 
@@ -112,4 +114,77 @@ def predictions_stlm(request):
     test_data_ser = MedidaSerializer(test_data, many=True)
     train_data_ser = MedidaSerializer(train_data, many=True)
     return Response({'test_data': test_data_ser.data, 'train_data': train_data_ser.data, 'error': error})
+
+@api_view(['GET'])
+def mediasM(request):
+    dom = []
+    lun = []
+    mart = []
+    mier = []
+    jue = []
+    vie = []
+    sab = []
+    feb = True
+    tre1 = False
+    tre = False
+    pr = Medida.objects.filter(fecha__date__year = 2015, fecha__date__month = 1, fecha__date__week_day = 1).order_by('fecha')
+    pr1 = Medida.objects.filter(fecha__date__year = 2015, fecha__date__month = 1, fecha__date__week_day = 2).order_by('fecha')
+    pr2 = Medida.objects.filter(fecha__date__year = 2015, fecha__date__month = 1, fecha__date__week_day = 3).order_by('fecha')
+    pr3 = Medida.objects.filter(fecha__date__year = 2015, fecha__date__month = 1, fecha__date__week_day = 4).order_by('fecha')
+    pr4 = Medida.objects.filter(fecha__date__year = 2015, fecha__date__month = 1, fecha__date__week_day = 5).order_by('fecha')
+    pr5 = Medida.objects.filter(fecha__date__year = 2015, fecha__date__month = 1, fecha__date__week_day = 6).order_by('fecha')
+    pr6 = Medida.objects.filter(fecha__date__year = 2015, fecha__date__month = 1, fecha__date__week_day = 7).order_by('fecha')
+    for i in range(pr.count()):
+        dom.append(pr[i].cobro)
+        lun.append(pr1[i].cobro)
+        mart.append(pr2[i].cobro)
+        mier.append(pr3[i].cobro)
+        jue.append(pr4[i].cobro)
+        vie.append(pr5[i].cobro)
+        sab.append(pr6[i].cobro)
+    print "ORIGINAL",dom,"\n"
+
+    dias = [dom,lun,mart,mier,jue,vie,sab]
+    
+    prediccion = []
+    vuelta = 9 
+    cuenta = 0
+    mes = 2
+    while(vuelta >0):
+        for dia in dias:
+            valores = []
+            i = dia.__len__()-1
+            h = dia.__len__()
+            while (i>=h-4):
+            #for i in range(dia.__len__()):
+                
+                 
+                valores.append(dia[i])
+                i-=1
+            valor = sum(valores)/(float(len(valores)))
+            dia.append(valor)
+            if cuenta == 28 and feb:
+                feb = False
+                tre1 = True
+                cuenta = 1
+                mes += 1
+            elif cuenta == 31 and tre1:
+                tre1 = False
+                tre = True
+                cuenta = 1
+                mes += 1
+            elif cuenta == 30 and tre:
+                tre1 = True
+                tre = False
+                cuenta = 1
+                mes+=1
+            else:
+                cuenta+=1
+            prediccion.append([valor,[cuenta,mes,2015]])
+        vuelta -= 1
+    print dom,"\n"
+    print "Prediccion monto, dia",prediccion
+    
+    print "FUNCIONA!!"
+    return Response()    
 
