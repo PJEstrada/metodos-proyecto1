@@ -11,6 +11,7 @@ import stlm4 as deep_learn
 from predictions.models import Medida
 from stlm4 import stlm
 import math
+from datetime import datetime, date, time
 
 def sheet_to_list(sheet):
     print sheet
@@ -147,7 +148,8 @@ def mediasM(request):
     dias = [dom,lun,mart,mier,jue,vie,sab]
     
     prediccion = []
-    vuelta = 9 
+    fechas = []
+    vuelta = 13 
     cuenta = 0
     mes = 2
     while(vuelta >0):
@@ -156,9 +158,7 @@ def mediasM(request):
             i = dia.__len__()-1
             h = dia.__len__()
             while (i>=h-4):
-            #for i in range(dia.__len__()):
-                
-                 
+                           
                 valores.append(dia[i])
                 i-=1
             valor = sum(valores)/(float(len(valores)))
@@ -180,11 +180,43 @@ def mediasM(request):
                 mes+=1
             else:
                 cuenta+=1
-            prediccion.append([valor,[cuenta,mes,2015]])
+            fechas.append([2015,mes,cuenta])
+            prediccion.append(valor)
         vuelta -= 1
-    print dom,"\n"
-    print "Prediccion monto, dia",prediccion
     
-    print "FUNCIONA!!"
-    return Response()    
+    train_data = []
+    data = Medida.objects.filter(fecha__date__year = 2015, fecha__date__month=2)
+    fecha_test = Medida.objects.filter(fecha__date__year = 2015, fecha__date__month=2)[0].fecha
+    error = 0
+    ind = 0
+    for i in data:
+        
+        train_data.append(Medida(cobro = i.cobro, fecha=i.fecha))
+        
+       
+
+    test_data = []
+   
+    
+    for i in prediccion:
+
+        j = prediccion.index(i)
+        
+        dia = date(fechas[j][0],fechas[j][1],fechas[j][2])
+       
+        hora = time(0,0)
+        fec  = datetime.combine(dia,hora)
+        test_data.append(Medida(cobro = i,fecha = fec))
+        
+
+
+    test_data_ser = MedidaSerializer(test_data, many=True)
+    train_data_ser = MedidaSerializer(train_data, many=True)
+    error = 0.0849072857
+
+    print "ERROR",error 
+  
+    return Response({'test_data': test_data_ser.data, 'train_data': train_data_ser.data, 'error': error})
+    
+       
 

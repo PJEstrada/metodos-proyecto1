@@ -22,9 +22,4 @@ urlpatterns = [
     	views.mediasM,
     	name='analisis'
     ),
-    url(
-    	r'^ponderadas/$',
-    	views.mediasMovP,
-    	name='MediasMPon'
-    ),
 ]
