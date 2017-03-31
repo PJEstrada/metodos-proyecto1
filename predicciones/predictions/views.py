@@ -15,6 +15,25 @@ import math
 from datetime import datetime, date, time
 
 
+
+def subtract_one_month(t):
+    """Return a `datetime.date` or `datetime.datetime` (as given) that is
+    one month later.
+    
+    Note that the resultant day of the month might change if the following
+    month has fewer days:
+    
+        >>> subtract_one_month(datetime.date(2010, 3, 31))
+        datetime.date(2010, 2, 28)
+    """
+    import datetime
+    one_day = datetime.timedelta(days=1)
+    one_month_earlier = t - one_day
+    while one_month_earlier.month == t.month or one_month_earlier.day > t.day:
+        one_month_earlier -= one_day
+    return one_month_earlier
+
+
 def sheet_to_list(sheet):
     print sheet
     # Accumulators
@@ -148,14 +167,27 @@ def mediasM(request):
     tre1 = False
     tre = False
     todo = Medida.objects.all()
+
+    #ultimo mes con informacion
     n = (todo[todo.count()-1].fecha).month
-    pr = Medida.objects.filter(fecha__date__year = 2015, fecha__date__month = n-3, fecha__date__week_day = 1).order_by('fecha')
-    pr1 = Medida.objects.filter(fecha__date__year = 2015, fecha__date__month = n-3, fecha__date__week_day = 2).order_by('fecha')
-    pr2 = Medida.objects.filter(fecha__date__year = 2015, fecha__date__month = n-3, fecha__date__week_day = 3).order_by('fecha')
-    pr3 = Medida.objects.filter(fecha__date__year = 2015, fecha__date__month = n-3, fecha__date__week_day = 4).order_by('fecha')
-    pr4 = Medida.objects.filter(fecha__date__year = 2015, fecha__date__month = n-3, fecha__date__week_day = 5).order_by('fecha')
-    pr5 = Medida.objects.filter(fecha__date__year = 2015, fecha__date__month = n-3, fecha__date__week_day = 6).order_by('fecha')
-    pr6 = Medida.objects.filter(fecha__date__year = 2015, fecha__date__month = n-3, fecha__date__week_day = 7).order_by('fecha')
+    
+    year =  (todo[todo.count()-1].fecha).year
+    fecha = todo[todo.count()-1].fecha 
+    umes = subtract_one_month(fecha)
+    domes =subtract_one_month(umes)
+    Udia = domes.weekday()
+    #se extrae la informacion de dos meses antes
+    
+    pr = Medida.objects.filter(fecha__date__month = domes.month, fecha__date__week_day=1).order_by('fecha')
+    pr1 = Medida.objects.filter(fecha__date__month = domes.month, fecha__date__week_day=2).order_by('fecha')
+    pr2 = Medida.objects.filter(fecha__date__month = domes.month, fecha__date__week_day=3).order_by('fecha')
+    pr3 = Medida.objects.filter(fecha__date__month = domes.month, fecha__date__week_day=4).order_by('fecha')
+    pr4 = Medida.objects.filter(fecha__date__month = domes.month, fecha__date__week_day=5).order_by('fecha')
+    pr5 = Medida.objects.filter(fecha__date__month = domes.month, fecha__date__week_day=6).order_by('fecha')
+    pr6 = Medida.objects.filter(fecha__date__month = domes.month, fecha__date__week_day=7).order_by('fecha')
+    #guardo la informacion segun el dia
+    #if fruit == 'Apple' : isApple = True
+
     for i in range(pr.count()):
         dom.append(pr[i].cobro)
         lun.append(pr1[i].cobro)
@@ -165,8 +197,21 @@ def mediasM(request):
         vie.append(pr5[i].cobro)
         sab.append(pr6[i].cobro)
     print "ORIGINAL",dom,"\n"
+    if(Udia == 0):
+         dias = [dom,lun,mart,mier,jue,vie,sab]
+    elif(Udia ==1):
+        dias = [lun,mart,mier,jue,vie,sab,dom]
+    elif(Udia ==2):
+        dias = [mart,mier,jue,vie,sab,dom,lun]
+    elif(Udia == 3):
+        dias = [mier,jue,vie,sab,dom,lun,mart]
+    elif(Udia ==1):
+        dias = [jue,vie,sab,dom,lun,mart,mier]
+    elif(Udia ==2):
+        dias = [vie,sab,dom,lun,mart,mier,jue]
+    elif(Udia == 3):
+        dias = [sab,dom,lun,mart,mier,jue,vie]
 
-    dias = [dom,lun,mart,mier,jue,vie,sab]
     
     prediccion = []
     fechas = []
@@ -178,8 +223,7 @@ def mediasM(request):
             valores = []
             i = dia.__len__()-1
             h = dia.__len__()
-            while (i>=h-4):
-                           
+            while (i>=h-4):           
                 valores.append(dia[i])
                 i-=1
             valor = sum(valores)/(float(len(valores)))
@@ -205,16 +249,6 @@ def mediasM(request):
             prediccion.append(valor)
         vuelta -= 1
     
-   ''' train_data = []
-    data = Medida.objects.filter(fecha__date__year = 2015, fecha__date__month=2)
-    fecha_test = Medida.objects.filter(fecha__date__year = 2015, fecha__date__month=2)[0].fecha
-    error = 0
-    ind = 0
-    for i in data:
-        
-        train_data.append(Medida(cobro = i.cobro, fecha=i.fecha))
-        
-       '''
 
     test_data = []
    
