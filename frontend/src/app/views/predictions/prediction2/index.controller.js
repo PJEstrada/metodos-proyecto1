@@ -17,7 +17,7 @@
     'moment',
     'ApiGetPredictions',
     'ApiGetFinanceData',
-    'ApiGetSTLM'
+    'ApiGetMovingAverage'
   ];
   function predictionController(
     $scope,
@@ -28,7 +28,7 @@
     moment,
     ApiGetPredictions,
     ApiGetFinanceData,
-    ApiGetSTLM
+    ApiGetMovingAverage
   ) {
     var vm = this;
     vm.display_mode = "date";
@@ -55,10 +55,10 @@
 
     vm.forecast = function(){
       vm.loading = true;
-      vm.forecastResource = new ApiGetSTLM();
+      vm.forecastResource = new ApiGetMovingAverage();
       vm.loading = 'loading';
       vm.forecastResource.$get(function(response){
-        $log.log("FORECAST RESPONSE STLM");
+        $log.log("FORECAST RESPONSE MOVING AVERAGE");
         $log.log(response);
         // Populating test data
         for(var i =0; i<response.test_data.length; i++){

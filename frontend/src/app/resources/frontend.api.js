@@ -10,6 +10,7 @@
       'ngResource',
       'api.ApiGetPredictions',
       'api.ApiGetFinanceData',
-      'api.ApiGetSTLM'
+      'api.ApiGetSTLM',
+      'api.ApiGetMovingAverage'
     ]);
 })(angular);
