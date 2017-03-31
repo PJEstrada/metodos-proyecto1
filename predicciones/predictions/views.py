@@ -147,6 +147,8 @@ def mediasM(request):
     feb = True
     tre1 = False
     tre = False
+    todo = Medida.objects.all()
+    n = (todo[todo.count()-1].fecha).month
     pr = Medida.objects.filter(fecha__date__year = 2015, fecha__date__month = 1, fecha__date__week_day = 1).order_by('fecha')
     pr1 = Medida.objects.filter(fecha__date__year = 2015, fecha__date__month = 1, fecha__date__week_day = 2).order_by('fecha')
     pr2 = Medida.objects.filter(fecha__date__year = 2015, fecha__date__month = 1, fecha__date__week_day = 3).order_by('fecha')
@@ -170,7 +172,7 @@ def mediasM(request):
     fechas = []
     vuelta = 13 
     cuenta = 0
-    mes = 2
+    mes = n-1
     while(vuelta >0):
         for dia in dias:
             valores = []
@@ -238,4 +240,6 @@ def mediasM(request):
     return Response({'test_data': test_data_ser.data, 'train_data': train_data_ser.data, 'error': error})
     
        
-
+@api_view(['GET'])
+def mediasMovP(request):
+    return Responde()
