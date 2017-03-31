@@ -14,3 +14,8 @@ class Medida(models.Model):
 
     def __str__(self):
         return "Fecha: " + str(self.fecha) + " , Monto: " + str(self.cobro)
+
+
+class LearningModel(models.Model):
+    trained = models.BooleanField(default=False)
+    name = models.CharField(blank=True, null=True, max_length=500)

@@ -9,9 +9,22 @@ import pandas
 import math
 from keras.models import Sequential
 from keras.layers import Dense
+from keras.models import model_from_json
+from keras.models import Sequential
+from keras.layers import Dense
 from keras.layers import LSTM
 from sklearn.preprocessing import MinMaxScaler
 from sklearn.metrics import mean_squared_error
+
+
+def save_model(model, file_name):
+    # serialize model to JSON
+    model_json = model.to_json()
+    with open(file_name, "w") as json_file:
+        json_file.write(model_json)
+    # serialize weights to HDF5
+    # model.save_weights("model.h5")
+    print("Saved model to disk")
 
 
 def create_dataset(dataset, look_back=1):
@@ -23,7 +36,7 @@ def create_dataset(dataset, look_back=1):
     return numpy.array(dataX), numpy.array(dataY)
 
 
-def stlm(medidas):
+def stlm(medidas, num_predictions=100):
     numpy.random.seed(7)
     dataframe = medida_to_data_frame(medidas)
     dataset = dataframe.values
@@ -47,9 +60,13 @@ def stlm(medidas):
     model.add(LSTM(4, batch_input_shape=(batch_size, look_back, 1), stateful=True))
     model.add(Dense(1))
     model.compile(loss='mean_squared_error', optimizer='adam')
-    for i in range(100):
+    for i in range(500):
+        print str(i) + "/100"
         model.fit(trainX, trainY, nb_epoch=1, batch_size=batch_size, verbose=2, shuffle=False)
         model.reset_states()
+
+    # TODO: Save model to avoid training in the future.
+    # save_model(model,"cobros.json")
     # make predictions
     trainPredict = model.predict(trainX, batch_size=batch_size)
     model.reset_states()
@@ -83,6 +100,28 @@ def stlm(medidas):
     print('Train Score: %.2f RMSE' % (trainScore))
     testScore = math.sqrt(mean_squared_error(testY[0], testPredict[:, 0]))
     print('Test Score: %.2f RMSE' % (testScore))
+
+    # Generate predictions for future month
+    medidas_mes_siguiente = Medida.objects.all()[len(Medida.objects.all())-num_predictions:]
+    dataframe_next_month = medida_to_data_frame(medidas)
+    dataset_next_month = dataframe.values
+    dataset_next_month = dataset_next_month.astype('float32')
+    scaler = MinMaxScaler(feature_range=(0, 1))
+    dataset_next_month = scaler.fit_transform(dataset_next_month)
+    testX_new_month, testY_new_month = create_dataset(dataset_next_month, look_back)
+    testX_new_month = numpy.reshape(testX_new_month, (testX_new_month.shape[0], testX_new_month.shape[1], 1))
+    predict_next_month = model.predict(testX_new_month, batch_size=batch_size)
+    testPredict_next_month = scaler.inverse_transform(predict_next_month)
+    predict_array_next_month = []
+    for x in testPredict_next_month:
+        predict_array_next_month.append(x[0])
+    new_month = []
+    for i in range(len(dataset)):
+        new_month.append([numpy.nan])
+    for i in range(num_predictions):
+        new_month.append([testPredict_next_month[i]])
+    new_month = numpy.array(new_month)
+
     # shift train predictions for plotting
     trainPredictPlot = numpy.empty_like(dataset)
     trainPredictPlot[:, :] = numpy.nan
@@ -91,9 +130,12 @@ def stlm(medidas):
     testPredictPlot = numpy.empty_like(dataset)
     testPredictPlot[:, :] = numpy.nan
     testPredictPlot[len(trainPredict) + (look_back * 2) + 1:len(dataset) - 1, :] = testPredict
+    # shift new month predictions for plotting
+    next_month_plot = new_month
     # plot baseline and predictions
     plt.plot(scaler.inverse_transform(dataset))
     plt.plot(trainPredictPlot)
     plt.plot(testPredictPlot)
+    plt.plot(next_month_plot)
     plt.show(block=False)
-    return trainPredictPlot, testPredictPlot, avg_error, dataset, train_size, test_size
+    return trainPredictPlot, testPredictPlot, next_month_plot, avg_error, dataset, train_size, test_size

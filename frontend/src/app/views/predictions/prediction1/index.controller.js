@@ -64,8 +64,35 @@
         for(var i =0; i<response.test_data.length; i++){
           $scope.data[1].push({'x': response.test_data[i].fecha , 'y': response.test_data[i].cobro} )
         }
+        // Populating train data
         for(var i =0; i<response.train_data.length; i++){
           $scope.data[2].push({'x': response.train_data[i].fecha , 'y': response.train_data[i].cobro} )
+        }
+        // Populating next month data
+        for(var i =0; i<response.next_month.length; i++){
+          $scope.data[3].push({'x': response.next_month[i].fecha , 'y': response.next_month[i].cobro} )
+        }
+        // Populating next month data error lower
+        for(var i=0; i<response.next_month.length; i++){
+          if(response.next_month[i].cobro == null){
+            $scope.data[4].push({'x': response.next_month[i].fecha , 'y': response.next_month[i].cobro} )
+          }
+          else{
+            var cobro = response.next_month[i].cobro- (response.next_month[i].cobro * response.error);
+            $scope.data[4].push({'x': response.next_month[i].fecha , 'y': cobro} )
+          }
+
+        }
+        // Populating next month data error upper
+        for(var i =0; i<response.next_month.length; i++){
+          if(response.next_month[i].cobro == null){
+            $scope.data[4].push({'x': response.next_month[i].fecha , 'y': response.next_month[i].cobro} )
+          }
+          else{
+            var cobro = (response.next_month[i].cobro * response.error) + response.next_month[i].cobro;
+            $scope.data[5].push({'x': response.next_month[i].fecha , 'y': cobro} )
+          }
+
         }
         vm.loading = '';
         vm.refreshGrid();
@@ -73,13 +100,16 @@
         vm.error = response.error;
 
       });
-    }
+    };
     // Fetch All predictions
     vm.fetchMeterData = function () {
 
-      $scope.series = ["Reales", "Pronostico", "Entrenamiento"];
-      $scope.datasetOverride = [{ yAxisID: 'y-axis-1' }, { yAxisID: 'y-axis-2' }, { yAxisID: 'y-axis-3' }];
+      $scope.series = ["Reales", "Pronostico", "Entrenamiento","Siguiente Mes","Siguiente Mes Max", "Siguiente Mes Min" ];
+      $scope.datasetOverride = [{ yAxisID: 'y-axis-1' }, { yAxisID: 'y-axis-2' }, { yAxisID: 'y-axis-3' }, { yAxisID: 'y-axis-4' }, { yAxisID: 'y-axis-5' }, { yAxisID: 'y-axis-6' }];
       $scope.data = [
+        [],
+        [],
+        [],
         [],
         [],
         []
@@ -146,7 +176,31 @@
           pointBorderColor: '#00FF00',
           pointHoverBorderColor: '#00FF00',
           fill: 'rgba(220,220,220,0)' /* this option hide background-color */
-        }, 'rgba(220,220,220,0)'];
+        },
+        { backgroundColor : 'rgba(220,220,220,0)',
+          pointBackgroundColor: '#ffFF00',
+          pointHoverBackgroundColor: '#ffFF00',
+          borderColor: '#ffFF00',
+          pointBorderColor: '#ffFF00',
+          pointHoverBorderColor: '#ffFF00',
+          fill: 'rgba(220,220,220,0)' /* this option hide background-color */
+        },
+        { backgroundColor : 'rgba(220,220,220,0)',
+          pointBackgroundColor: '#451b74',
+          pointHoverBackgroundColor: '#451b74',
+          borderColor: '#451b74',
+          pointBorderColor: '#451b74',
+          pointHoverBorderColor: '#451b74',
+          fill: 'rgba(220,220,220,0)' /* this option hide background-color */
+        },
+        { backgroundColor : 'rgba(220,220,220,0)',
+          pointBackgroundColor: '#744000',
+          pointHoverBackgroundColor: '#744000',
+          borderColor: '#744000',
+          pointBorderColor: '#744000',
+          pointHoverBorderColor: '#744000',
+          fill: 'rgba(220,220,220,0)' /* this option hide background-color */
+        },];
     };
 
     function getAveragesEntries(data, divisor ){

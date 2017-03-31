@@ -15863,6 +15863,84 @@ body .sidebar .option-sidebar-selected span.icon-container i.fa {
   color: #828282;
   font-size: 0.9rem;
 }
+.chart {
+  max-width: 1200px;
+  max-height: 400px;
+  margin: auto;
+}
+.log {
+  overflow: scroll;
+}
+.input-grid {
+  overflow-x: inherit;
+  padding: 15px;
+}
+.input-grid .filters {
+  text-align: left;
+}
+.input-grid .filters .time-input {
+  min-width: 100px;
+  min-height: 35px;
+  font-size: 2em;
+  margin-bottom: 25px;
+  display: inline;
+}
+.input-grid .filters .time-label {
+  display: inline;
+  margin-bottom: 25px;
+  margin-right: 15px;
+}
+.input-grid .actions {
+  margin: auto;
+}
+.read-notification-button:hover {
+  color: #333;
+}
+.eye-icon {
+  font-size: 1.5em;
+  color: #333;
+}
+.tank-full-button {
+  text-align: center;
+  margin: auto;
+}
+.notification-read {
+  color: green;
+  font-size: 1.3em;
+  font-weight: bold;
+}
+.date-col {
+  margin: auto;
+}
+.fill-tank-popup .col {
+  -webkit-box-flex: 100;
+      -ms-flex-positive: 100;
+          flex-grow: 100;
+}
+.fill-tank-popup .content-fill-tank {
+  padding: 25px 50px;
+}
+.fill-tank-popup .content-fill-tank .popup-close {
+  color: #a3a3a3;
+  right: 10px;
+  top: 10px;
+  font-size: 1.1rem;
+}
+.fill-tank-popup .content-fill-tank .subheader {
+  color: #333;
+  font-size: 1.5rem;
+  margin-bottom: 0;
+  overflow-y: hidden;
+}
+.fill-tank-popup .content-fill-tank h1 {
+  color: #5e5e5e;
+  font-size: 2rem;
+  margin-top: 1rem;
+}
+.fill-tank-popup .content-fill-tank .paragraph-delete {
+  color: #828282;
+  font-size: 0.9rem;
+}
 .dashboard .switching-button {
   -webkit-transition: none;
   transition: none;

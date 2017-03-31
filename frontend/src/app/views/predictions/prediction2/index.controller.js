@@ -5,7 +5,7 @@
   angular
     .module('frontend')
     .controller(
-      'PredictionController',
+      'PredictionController2',
       predictionController);
 
   predictionController.$inject = [

@@ -19,7 +19,7 @@
           cssClassnames: 'dashboard start'
         }
       })
-      .state('meter', {
+      .state('pred1', {
         url: '/prediction1/',
         templateUrl: 'app/views/predictions/prediction1/index.html',
         controller: 'PredictionController',
@@ -27,7 +27,16 @@
         data:{
           cssClassnames: 'dashboard start'
         }
-      });
+      })
+      .state('pred2', {
+          url: '/prediction2/',
+          templateUrl: 'app/views/predictions/prediction2/index.html',
+          controller: 'PredictionController2',
+          controllerAs: 'ctrl',
+          data:{
+            cssClassnames: 'dashboard start'
+          }
+        });
   }
 
 })(angular);
