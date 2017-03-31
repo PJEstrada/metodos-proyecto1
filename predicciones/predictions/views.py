@@ -205,7 +205,7 @@ def mediasM(request):
             prediccion.append(valor)
         vuelta -= 1
     
-    train_data = []
+   ''' train_data = []
     data = Medida.objects.filter(fecha__date__year = 2015, fecha__date__month=2)
     fecha_test = Medida.objects.filter(fecha__date__year = 2015, fecha__date__month=2)[0].fecha
     error = 0
@@ -214,7 +214,7 @@ def mediasM(request):
         
         train_data.append(Medida(cobro = i.cobro, fecha=i.fecha))
         
-       
+       '''
 
     test_data = []
    
@@ -232,12 +232,12 @@ def mediasM(request):
 
 
     test_data_ser = MedidaSerializer(test_data, many=True)
-    train_data_ser = MedidaSerializer(train_data, many=True)
+    #train_data_ser = MedidaSerializer(train_data, many=True)
     error = 0.0849072857
 
     print "ERROR",error 
   
-    return Response({'test_data': test_data_ser.data, 'train_data': train_data_ser.data, 'error': error})
+    return Response({'prediccion': test_data_ser.data,  'error': error})
     
        
 @api_view(['GET'])
