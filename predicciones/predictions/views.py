@@ -149,13 +149,13 @@ def mediasM(request):
     tre = False
     todo = Medida.objects.all()
     n = (todo[todo.count()-1].fecha).month
-    pr = Medida.objects.filter(fecha__date__year = 2015, fecha__date__month = 1, fecha__date__week_day = 1).order_by('fecha')
-    pr1 = Medida.objects.filter(fecha__date__year = 2015, fecha__date__month = 1, fecha__date__week_day = 2).order_by('fecha')
-    pr2 = Medida.objects.filter(fecha__date__year = 2015, fecha__date__month = 1, fecha__date__week_day = 3).order_by('fecha')
-    pr3 = Medida.objects.filter(fecha__date__year = 2015, fecha__date__month = 1, fecha__date__week_day = 4).order_by('fecha')
-    pr4 = Medida.objects.filter(fecha__date__year = 2015, fecha__date__month = 1, fecha__date__week_day = 5).order_by('fecha')
-    pr5 = Medida.objects.filter(fecha__date__year = 2015, fecha__date__month = 1, fecha__date__week_day = 6).order_by('fecha')
-    pr6 = Medida.objects.filter(fecha__date__year = 2015, fecha__date__month = 1, fecha__date__week_day = 7).order_by('fecha')
+    pr = Medida.objects.filter(fecha__date__year = 2015, fecha__date__month = n-3, fecha__date__week_day = 1).order_by('fecha')
+    pr1 = Medida.objects.filter(fecha__date__year = 2015, fecha__date__month = n-3, fecha__date__week_day = 2).order_by('fecha')
+    pr2 = Medida.objects.filter(fecha__date__year = 2015, fecha__date__month = n-3, fecha__date__week_day = 3).order_by('fecha')
+    pr3 = Medida.objects.filter(fecha__date__year = 2015, fecha__date__month = n-3, fecha__date__week_day = 4).order_by('fecha')
+    pr4 = Medida.objects.filter(fecha__date__year = 2015, fecha__date__month = n-3, fecha__date__week_day = 5).order_by('fecha')
+    pr5 = Medida.objects.filter(fecha__date__year = 2015, fecha__date__month = n-3, fecha__date__week_day = 6).order_by('fecha')
+    pr6 = Medida.objects.filter(fecha__date__year = 2015, fecha__date__month = n-3, fecha__date__week_day = 7).order_by('fecha')
     for i in range(pr.count()):
         dom.append(pr[i].cobro)
         lun.append(pr1[i].cobro)
@@ -242,4 +242,5 @@ def mediasM(request):
        
 @api_view(['GET'])
 def mediasMovP(request):
+   
     return Responde()
