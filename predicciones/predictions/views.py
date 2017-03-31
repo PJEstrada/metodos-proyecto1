@@ -251,8 +251,7 @@ def mediasM(request):
     
 
     test_data = []
-   
-    
+
     for i in prediccion:
 
         j = prediccion.index(i)

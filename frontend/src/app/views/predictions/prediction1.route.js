@@ -36,6 +36,15 @@
           data:{
             cssClassnames: 'dashboard start'
           }
+        })
+      .state('pred3', {
+          url: '/prediction3/',
+          templateUrl: 'app/views/predictions/prediction3/index.html',
+          controller: 'PredictionController3',
+          controllerAs: 'ctrl',
+          data:{
+            cssClassnames: 'dashboard start'
+          }
         });
   }
 

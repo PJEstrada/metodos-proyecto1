@@ -11,6 +11,7 @@
       'api.ApiGetPredictions',
       'api.ApiGetFinanceData',
       'api.ApiGetSTLM',
-      'api.ApiGetMovingAverage'
+      'api.ApiGetMovingAverage',
+      'api.ApiGetWeightedMovingAverage'
     ]);
 })(angular);
