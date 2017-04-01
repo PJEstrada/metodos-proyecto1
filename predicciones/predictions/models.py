@@ -11,6 +11,7 @@ class DataSet(models.Model):
 class Medida(models.Model):
     fecha = models.DateTimeField()
     cobro = models.FloatField()
+    std = models.FloatField(blank=True, null=True)
 
     def __str__(self):
         return "Fecha: " + str(self.fecha) + " , Monto: " + str(self.cobro)

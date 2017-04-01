@@ -12,8 +12,6 @@ import stlm4 as deep_learn
 from predictions.models import Medida
 from stlm4 import stlm
 import math
-from datetime import datetime, date, time
-
 
 
 def subtract_one_month(t):
@@ -156,124 +154,43 @@ def predictions_stlm(request):
 
 @api_view(['GET'])
 def mediasM(request):
-    dom = []
-    lun = []
-    mart = []
-    mier = []
-    jue = []
-    vie = []
-    sab = []
-    feb = True
-    tre1 = False
-    tre = False
-    todo = Medida.objects.all()
+    medidas = Medida.objects.all()
+    datos = []
+    for m in medidas:
+        datos.append(m)
+    # Agarramos el ultimo dia
+    n_dias = 30
+    for i in range(0,n_dias):
+        ultima_medida = datos[len(datos)-1]
+        v1 = datos[len(datos)-1-7].cobro
+        v2 = datos[len(datos)-1-14].cobro
+        v3 = datos[len(datos)-1-21].cobro
+        v4 = datos[len(datos)-1-28].cobro
+        promedio = (v1+v2+v3+v4)/4
+        std = math.sqrt(((v1-promedio)**2+(v2-promedio)**2+(v3-promedio)**2+(v4-promedio)**2)/3)
 
-    #ultimo mes con informacion
-    n = (todo[todo.count()-1].fecha).month
-    
-    year =  (todo[todo.count()-1].fecha).year
-    fecha = todo[todo.count()-1].fecha 
-    umes = subtract_one_month(fecha)
-    domes =subtract_one_month(umes)
-    Udia = domes.weekday()
-    #se extrae la informacion de dos meses antes
-    
-    pr = Medida.objects.filter(fecha__date__month = domes.month, fecha__date__week_day=1).order_by('fecha')
-    pr1 = Medida.objects.filter(fecha__date__month = domes.month, fecha__date__week_day=2).order_by('fecha')
-    pr2 = Medida.objects.filter(fecha__date__month = domes.month, fecha__date__week_day=3).order_by('fecha')
-    pr3 = Medida.objects.filter(fecha__date__month = domes.month, fecha__date__week_day=4).order_by('fecha')
-    pr4 = Medida.objects.filter(fecha__date__month = domes.month, fecha__date__week_day=5).order_by('fecha')
-    pr5 = Medida.objects.filter(fecha__date__month = domes.month, fecha__date__week_day=6).order_by('fecha')
-    pr6 = Medida.objects.filter(fecha__date__month = domes.month, fecha__date__week_day=7).order_by('fecha')
-    #guardo la informacion segun el dia
-    #if fruit == 'Apple' : isApple = True
-
-    for i in range(pr.count()):
-        dom.append(pr[i].cobro)
-        lun.append(pr1[i].cobro)
-        mart.append(pr2[i].cobro)
-        mier.append(pr3[i].cobro)
-        jue.append(pr4[i].cobro)
-        vie.append(pr5[i].cobro)
-        sab.append(pr6[i].cobro)
-    print "ORIGINAL",dom,"\n"
-    if(Udia == 0):
-         dias = [dom,lun,mart,mier,jue,vie,sab]
-    elif(Udia ==1):
-        dias = [lun,mart,mier,jue,vie,sab,dom]
-    elif(Udia ==2):
-        dias = [mart,mier,jue,vie,sab,dom,lun]
-    elif(Udia == 3):
-        dias = [mier,jue,vie,sab,dom,lun,mart]
-    elif(Udia ==1):
-        dias = [jue,vie,sab,dom,lun,mart,mier]
-    elif(Udia ==2):
-        dias = [vie,sab,dom,lun,mart,mier,jue]
-    elif(Udia == 3):
-        dias = [sab,dom,lun,mart,mier,jue,vie]
-
-    
-    prediccion = []
-    fechas = []
-    vuelta = 13 
-    cuenta = 0
-    mes = n-1
-    while(vuelta >0):
-        for dia in dias:
-            valores = []
-            i = dia.__len__()-1
-            h = dia.__len__()
-            while (i>=h-4):           
-                valores.append(dia[i])
-                i-=1
-            valor = sum(valores)/(float(len(valores)))
-            dia.append(valor)
-            if cuenta == 28 and feb:
-                feb = False
-                tre1 = True
-                cuenta = 1
-                mes += 1
-            elif cuenta == 31 and tre1:
-                tre1 = False
-                tre = True
-                cuenta = 1
-                mes += 1
-            elif cuenta == 30 and tre:
-                tre1 = True
-                tre = False
-                cuenta = 1
-                mes+=1
-            else:
-                cuenta+=1
-            fechas.append([2015,mes,cuenta])
-            prediccion.append(valor)
-        vuelta -= 1
-    
-
-    test_data = []
-
-    for i in prediccion:
-
-        j = prediccion.index(i)
-        
-        dia = date(fechas[j][0],fechas[j][1],fechas[j][2])
-       
-        hora = time(0,0)
-        fec  = datetime.combine(dia,hora)
-        test_data.append(Medida(cobro = i,fecha = fec))
-        
-
-
-    test_data_ser = MedidaSerializer(test_data, many=True)
-    #train_data_ser = MedidaSerializer(train_data, many=True)
-    error = 0.0849072857
-
-    print "ERROR",error 
-  
-    return Response({'prediccion': test_data_ser.data,  'error': error})
+        datos.append(Medida(fecha=ultima_medida.fecha + datetime.timedelta(days=1), cobro=promedio, std=std))
+    predictions_ser = MedidaSerializer(datos, many=True)
+    return Response({'prediccion': predictions_ser.data,  'error': 0})
     
        
 @api_view(['GET'])
 def mediasMovP(request):
-   
-    return Responde()
+    medidas = Medida.objects.all()
+    datos = []
+    for m in medidas:
+        datos.append(m)
+    # Agarramos el ultimo dia
+    n_dias = 30
+    for i in range(0, n_dias):
+        ultima_medida = datos[len(datos) - 1]
+        v1 = datos[len(datos) - 1 - 7].cobro
+        v2 = datos[len(datos) - 1 - 14].cobro
+        v3 = datos[len(datos) - 1 - 21].cobro
+        v4 = datos[len(datos) - 1 - 28].cobro
+        promedio = ((0.15)*v1 + (0.05)*v2 + (0.05)*v3 + (0.75)*v4)
+        std = math.sqrt(((v1 - promedio) ** 2 + (v2 - promedio) ** 2 + (v3 - promedio) ** 2 + (v4 - promedio) ** 2) / 3)
+
+        datos.append(Medida(fecha=ultima_medida.fecha + datetime.timedelta(days=1), cobro=promedio, std=std))
+    predictions_ser = MedidaSerializer(datos, many=True)
+    return Response({'prediccion': predictions_ser.data, 'error': 0})

@@ -11,4 +11,4 @@ class UploadDataSetSerializer(serializers.ModelSerializer):
 class MedidaSerializer(serializers.ModelSerializer):
     class Meta:
         model = Medida
-        fields = ('pk', 'fecha', 'cobro')
+        fields = ('pk', 'fecha', 'cobro', 'std')

@@ -61,11 +61,23 @@
         $log.log("FORECAST RESPONSE MOVING AVERAGE");
         $log.log(response);
         // Populating test data
-        for(var i =0; i<response.test_data.length; i++){
-          $scope.data[1].push({'x': response.test_data[i].fecha , 'y': response.test_data[i].cobro} )
+        for(var i =0; i<response.prediccion.length; i++){
+          if(response.prediccion[i].pk == null){
+            $scope.data[1].push({'x': response.prediccion[i].fecha , 'y': response.prediccion[i].cobro} )
+          }
+
         }
-        for(var i =0; i<response.train_data.length; i++){
-          $scope.data[2].push({'x': response.train_data[i].fecha , 'y': response.train_data[i].cobro} )
+        for(var i =0; i<response.prediccion.length; i++){
+          if(response.prediccion[i].pk == null){
+            $scope.data[2].push({'x': response.prediccion[i].fecha , 'y': response.prediccion[i].cobro+response.prediccion[i].std} )
+          }
+
+        }
+        for(var i =0; i<response.prediccion.length; i++){
+          if(response.prediccion[i].pk == null){
+            $scope.data[3].push({'x': response.prediccion[i].fecha , 'y': response.prediccion[i].cobro-response.prediccion[i].std} )
+          }
+
         }
         vm.loading = '';
         vm.refreshGrid();
@@ -73,13 +85,14 @@
         vm.error = response.error;
 
       });
-    }
+    };
     // Fetch All predictions
     vm.fetchMeterData = function () {
 
-      $scope.series = ["Reales", "Pronostico", "Entrenamiento"];
-      $scope.datasetOverride = [{ yAxisID: 'y-axis-1' }, { yAxisID: 'y-axis-2' }, { yAxisID: 'y-axis-3' }];
+      $scope.series = ["Reales", "Pronostico", "Error-Superior", "Error-Inferior"];
+      $scope.datasetOverride = [{ yAxisID: 'y-axis-1' }, { yAxisID: 'y-axis-2' }, { yAxisID: 'y-axis-3' }, { yAxisID: 'y-axis-4' }];
       $scope.data = [
+        [],
         [],
         [],
         []
@@ -131,14 +144,14 @@
         pointHoverBorderColor: '#0062ff',
         fill: 'rgba(220,220,220,0)' /* this option hide background-color */
       },
-      { backgroundColor : 'rgba(220,220,220,0)',
-        pointBackgroundColor: '#FF0000',
-        pointHoverBackgroundColor: '#FF0000',
-        borderColor: '#FF0000',
-        pointBorderColor: '#FF0000',
-        pointHoverBorderColor: '#FF0000',
-        fill: 'rgba(220,220,220,0)' /* this option hide background-color */
-      },
+        { backgroundColor : 'rgba(220,220,220,0)',
+          pointBackgroundColor: '#FF0000',
+          pointHoverBackgroundColor: '#FF0000',
+          borderColor: '#FF0000',
+          pointBorderColor: '#FF0000',
+          pointHoverBorderColor: '#FF0000',
+          fill: 'rgba(220,220,220,0)' /* this option hide background-color */
+        },
         { backgroundColor : 'rgba(220,220,220,0)',
           pointBackgroundColor: '#00FF00',
           pointHoverBackgroundColor: '#00FF00',
@@ -146,7 +159,15 @@
           pointBorderColor: '#00FF00',
           pointHoverBorderColor: '#00FF00',
           fill: 'rgba(220,220,220,0)' /* this option hide background-color */
-        }, 'rgba(220,220,220,0)'];
+        },
+        { backgroundColor : 'rgba(220,220,220,0)',
+          pointBackgroundColor: '#451b74',
+          pointHoverBackgroundColor: '#451b74',
+          borderColor: '#451b74',
+          pointBorderColor: '#451b74',
+          pointHoverBorderColor: '#451b74',
+          fill: 'rgba(220,220,220,0)' /* this option hide background-color */
+        },];
     };
 
     function getAveragesEntries(data, divisor ){
